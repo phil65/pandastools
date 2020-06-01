@@ -27,3 +27,12 @@ def test_split():
     df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
     df2 = df.pt.split(thresh=3, colname="a", extra_rows=0)
     print(df2)
+
+
+def test_index_to_secs():
+    df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
+
+
+def test_cleanup():
+    df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
+    df.cleanup()
