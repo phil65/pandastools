@@ -6,6 +6,6 @@ from . import accessors
 
 __author__ = """Philipp Temminghoff"""
 __email__ = 'phil65@kodi.tv'
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 __all__ = ["accessors", "utils"]

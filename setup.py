@@ -4,7 +4,8 @@
 """The setup script."""
 
 from setuptools import find_packages, setup
-from sphinx.setup_command import BuildDoc
+
+# from sphinx.setup_command import BuildDoc
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -42,7 +43,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/phil65/pandastools',
-    version='0.0.3',
+    version='0.0.4',
     zip_safe=False,
-    cmdclass={"build_sphinx": BuildDoc}
+    # cmdclass={"build_sphinx": BuildDoc}
 )
