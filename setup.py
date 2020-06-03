@@ -43,7 +43,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/phil65/pandastools',
-    version='0.0.6',
+    version='0.0.7',
     zip_safe=False,
     # cmdclass={"build_sphinx": BuildDoc}
 )
