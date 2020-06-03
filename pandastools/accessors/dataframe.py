@@ -82,6 +82,16 @@ class DataFrameAccessor(object):
         ds[cols] = ds.select_dtypes(["object"]).apply(lambda x: x.astype("category"))
         return ds
 
+    def tolerance_bands(self, window, pct):
+        ds = self._obj
+        rolling = ds.rolling(window=window, center=True, min_periods=1)
+        u_band = np.maximum(rolling.max(), ds * (pct + 1))
+        l_band = np.minimum(rolling.min(), ds * (1 - pct))
+        result = pd.concat([ds, l_band, u_band], axis=1)
+        cols = [f"{x}_{y}" for x in ["real", "lower", "upper"] for y in ds.columns]
+        result.columns = cols
+        return result
+
 
 if __name__ == "__main__":
     df = pd.DataFrame()

@@ -24,3 +24,18 @@ class SeriesAccessor(object):
             return self._obj
         s = pd.to_numeric(s, downcast=dc_type)
         return self._obj
+
+    def tolerance_bands(self, window, pct):
+        series = self._obj
+        rolling = series.rolling(window=window, center=True, min_periods=1)
+        u_band = np.maximum(rolling.max(), series * (pct + 1))
+        l_band = np.minimum(rolling.min(), series * (1 - pct))
+        result = pd.concat([series, l_band, u_band], axis=1)
+        cols = [f"{series.name}_{x}" for x in ["real", "lower", "upper"]]
+        result.columns = cols
+        return result
+
+
+if __name__ == "__main__":
+    df = pd.DataFrame(dict(a=[1, 2, 3, 4, 5]))
+    print(df["a"].pt.tolerance_bands(5, 0.01))

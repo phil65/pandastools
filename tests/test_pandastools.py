@@ -36,3 +36,9 @@ def test_index_to_secs():
 def test_cleanup():
     df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
     df.pt.cleanup()
+
+
+def test_tolerance_bands():
+    df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
+    df["a"].pt.tolerance_bands(window=2, pct=0.01)
+    df.pt.tolerance_bands(window=2, pct=0.01)
