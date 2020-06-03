@@ -92,6 +92,13 @@ class DataFrameAccessor(object):
         result.columns = cols
         return result
 
+    def merge_columns(self, columns, divider=" "):
+
+        def split(x):
+            return divider.join(str(i) for i in x)
+
+        return self._obj[columns].apply(split, axis=1)
+
 
 if __name__ == "__main__":
     df = pd.DataFrame()

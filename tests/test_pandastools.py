@@ -44,3 +44,9 @@ def test_tolerance_bands():
     df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
     df["a"].pt.tolerance_bands(window=2, pct=0.01)
     df.pt.tolerance_bands(window=2, pct=0.01)
+
+
+def test_merge_columns():
+    df = pd.DataFrame(dict(a=["a", "b", "c"], b=["d", "e", "f"]))
+    df["c"] = df.pt.merge_column_contents(columns=["b", "a"], divider="/")
+    print(df["c"])
