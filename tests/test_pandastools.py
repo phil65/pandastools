@@ -30,7 +30,9 @@ def test_split():
 
 
 def test_index_to_secs():
-    df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
+    date_rng = pd.date_range(start='1/1/2018', end='1/08/2018', freq='H')
+    result = pd.DataFrame(index=date_rng)
+    result.index.pt.index_to_secs()
 
 
 def test_cleanup():
