@@ -35,4 +35,4 @@ def test_index_to_secs():
 
 def test_cleanup():
     df = pd.DataFrame(dict(a=[1, 2, 5, 5, 1, 6]))
-    df.cleanup()
+    df.pt.cleanup()
