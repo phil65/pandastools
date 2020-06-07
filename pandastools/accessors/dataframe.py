@@ -9,7 +9,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from pandastools.utils import dataimport
+from pandastools.utils import dataimport, helpers
 
 logger = logging.getLogger(__name__)
 
@@ -83,12 +83,12 @@ class DataFrameAccessor(object):
         return ds
 
     def tolerance_bands(self, window, pct):
-        ds = self._obj
-        rolling = ds.rolling(window=window, center=True, min_periods=1)
-        u_band = np.maximum(rolling.max(), ds * (pct + 1))
-        l_band = np.minimum(rolling.min(), ds * (1 - pct))
-        result = pd.concat([ds, l_band, u_band], axis=1)
-        cols = [f"{x}_{y}" for x in ["real", "lower", "upper"] for y in ds.columns]
+        df = self._obj
+        rolling = df.rolling(window=window, center=True, min_periods=1)
+        u_band = np.maximum(rolling.max(), df * (pct + 1))
+        l_band = np.minimum(rolling.min(), df * (1 - pct))
+        result = pd.concat([df, l_band, u_band], axis=1)
+        cols = [f"{x}_{y}" for x in ["real", "lower", "upper"] for y in df.columns]
         result.columns = cols
         return result
 
@@ -99,7 +99,15 @@ class DataFrameAccessor(object):
 
         return self._obj[columns].apply(split, axis=1)
 
+    def duplicate_features(self, columns):
+        df = self._obj
+        new_names = helpers.uniquify_names(columns, df.columns)
+        new_cols = df[columns]
+        new_cols.columns = new_names
+        df = pd.concat([df, new_cols], axis=1)
+        return df
+
 
 if __name__ == "__main__":
-    df = pd.DataFrame()
-    df.pt.uniquify_columns()
+    test = pd.DataFrame()
+    test.pt.uniquify_columns()
