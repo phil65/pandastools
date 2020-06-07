@@ -6,6 +6,8 @@
 import numpy as np
 import pandas as pd
 
+SECONDS_PER_YEAR = 31_557_600
+
 
 @pd.api.extensions.register_series_accessor("pt")
 class SeriesAccessor(object):
@@ -34,6 +36,11 @@ class SeriesAccessor(object):
         cols = [f"{series.name}_{x}" for x in ["real", "lower", "upper"]]
         result.columns = cols
         return result
+
+    def float_year_to_datetime(self):
+        year = self._obj.astype(int)
+        secs = (self._obj - year) * SECONDS_PER_YEAR
+        return pd.to_datetime(year, format="%Y") + pd.to_timedelta(secs, unit="s")
 
 
 if __name__ == "__main__":
