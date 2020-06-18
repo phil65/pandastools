@@ -42,6 +42,19 @@ class SeriesAccessor(object):
         secs = (self._obj - year) * SECONDS_PER_YEAR
         return pd.to_datetime(year, format="%Y") + pd.to_timedelta(secs, unit="s")
 
+    def cut(self,
+            bins,
+            right: bool = True,
+            labels=None,
+            retbins: bool = False,
+            precision: int = 3,
+            include_lowest: bool = False,
+            duplicates: str = "raise",
+            ordered: bool = True):
+        return pd.cut(self._obj, bins=bins, right=right, labels=labels, retbins=retbins,
+                      precision=precision, include_lowest=include_lowest, duplicates=duplicates,
+                      ordered=ordered)
+
 
 if __name__ == "__main__":
     df = pd.DataFrame(dict(a=[1, 2, 3, 4, 5]))
