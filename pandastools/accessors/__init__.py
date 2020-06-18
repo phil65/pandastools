@@ -9,4 +9,4 @@ from .dataframe import DataFrameAccessor
 from .index import IndexAccessor
 from .series import SeriesAccessor
 
-__all__ = ["DataFrameAccessor", "SeriesAccessor", "IndexAccessor"]
+__all__ = ["DataFrameAccessor", "SeriesAccessor", "IndexAccessor", "scipydataframe"]
