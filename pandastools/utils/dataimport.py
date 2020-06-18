@@ -5,7 +5,6 @@
 
 import logging
 import time
-from typing import Union
 
 import numba
 import numpy as np
@@ -14,7 +13,7 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
-def add_transition_info(ds, colname, threshold=None, extra_rows=0):
+def add_transition_info(ds, colname, threshold: float = None, extra_rows: int = 0):
     """
     calculate splits and add "secs" and "process_num" column to dataframe
     """
@@ -57,7 +56,7 @@ def calc_secs(ds):
 
 @numba.jit(nopython=True, parallel=True)
 def get_transition_indices(y: np.ndarray,
-                           threshold: Union[int, float],
+                           threshold: float,
                            falling_edge: bool = False) -> np.ndarray:
     """
     return indices where a transition occurs (default: detect rising edges)
@@ -74,7 +73,7 @@ def get_transition_indices(y: np.ndarray,
 @numba.jit(nopython=True, parallel=True)
 def find_transition_times(t: np.ndarray,
                           y: np.ndarray,
-                          threshold: Union[int, float],
+                          threshold: float,
                           falling_edge: bool = False) -> np.ndarray:
     """
     Given the input signal `y` with samples at times `t`,
