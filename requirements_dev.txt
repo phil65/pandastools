@@ -15,4 +15,4 @@ Sphinx==3.1.1
 sphinx_rtd_theme==0.5.0
 sphinx-autodoc-annotation==1.0.post1
 sphinx-autodoc-typehints==1.10.3
-sphinx-git==10.1.1
+sphinx-git==11.0.0
