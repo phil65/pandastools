@@ -41,28 +41,30 @@ class DataFrameAccessor(object):
                 newitem = "{}_{}".format(item, fudge)
             seen.add(newitem)
             new.append(newitem)
-        self._obj.columns = new
-        return self._obj
+        df = self._obj.copy()
+        df.columns = new
+        return df
 
     def convert_dtypes(self, old_type, new_dtype):
         cols = self._obj.select_dtypes([old_type]).columns
-        self._obj[cols] = (self._obj.select_dtypes([old_type])
-                           .apply(lambda x: x.astype(new_dtype)))
-        return self._obj
+        df = self._obj.copy()
+        df[cols] = (df.select_dtypes([old_type])
+                    .apply(lambda x: x.astype(new_dtype)))
+        return df
 
     def split(self, thresh, colname, extra_rows: int = 0):
         """
         split dataframe into separate chunks based on supplied criteria
         """
         # split processes based on bool value (just process when no bool split)
-        ds = self._obj.drop("secs", errors="ignore", axis=1)
-        array = np.full((len(ds.index),), np.nan)
-        ds["process_num"] = pd.Categorical(array)
-        ds = dataimport.add_transition_info(ds=ds,
+        df = self._obj.drop("secs", errors="ignore", axis=1)
+        array = np.full((len(df.index),), np.nan)
+        df["process_num"] = pd.Categorical(array)
+        df = dataimport.add_transition_info(ds=df,
                                             colname=colname,
                                             threshold=thresh,
                                             extra_rows=extra_rows)
-        return ds
+        return df
 
     def index_to_secs(self):
         if self._obj.empty:
@@ -70,17 +72,17 @@ class DataFrameAccessor(object):
             return self._obj
         elif isinstance(self._obj.index, pd.DatetimeIndex):
             secs = self._obj.index.astype(int) / 1_000_000_000
-            ds = self._obj.assign(secs=secs - secs[0]).set_index("secs", drop=True)
-            return ds
+            df = self._obj.assign(secs=secs - secs[0]).set_index("secs", drop=True)
+            return df
         else:
             logger.debug("index_to_secs failed. No DateTimeIndex")
             return self._obj
 
     def cleanup(self):
-        ds = self._obj.infer_objects()
-        cols = ds.select_dtypes(["object"]).columns
-        ds[cols] = ds.select_dtypes(["object"]).apply(lambda x: x.astype("category"))
-        return ds
+        df = self._obj.infer_objects()
+        cols = df.select_dtypes(["object"]).columns
+        df[cols] = df.select_dtypes(["object"]).apply(lambda x: x.astype("category"))
+        return df
 
     def tolerance_bands(self, window, pct):
         df = self._obj

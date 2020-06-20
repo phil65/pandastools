@@ -14,8 +14,10 @@ def test_uniquify_cols():
     df2 = df.pt.uniquify_columns()
     assert df.equals(df2)
     df3 = pd.concat([df, df], axis=1)
-    df3.pt.uniquify_columns()
-    assert df3.columns.to_list() == ["a", "a_2"]
+    copy = df3.copy()
+    result = df3.pt.uniquify_columns()
+    assert result.columns.to_list() == ["a", "a_2"]
+    assert df3.equals(copy)
 
 
 def test_get_info():
@@ -48,5 +50,5 @@ def test_tolerance_bands():
 
 def test_merge_columns():
     df = pd.DataFrame(dict(a=["a", "b", "c"], b=["d", "e", "f"]))
-    df["c"] = df.pt.merge_column_contents(columns=["b", "a"], divider="/")
+    df["c"] = df.pt.merge_columns(columns=["b", "a"], divider="/")
     print(df["c"])
