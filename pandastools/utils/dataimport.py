@@ -55,9 +55,9 @@ def calc_secs(ds):
 
 
 @numba.jit(nopython=True, parallel=True)
-def get_transition_indices(y: np.ndarray,
-                           threshold: float,
-                           falling_edge: bool = False) -> np.ndarray:
+def get_transition_indices(
+    y: np.ndarray, threshold: float, falling_edge: bool = False
+) -> np.ndarray:
     """
     return indices where a transition occurs (default: detect rising edges)
     """
@@ -71,10 +71,9 @@ def get_transition_indices(y: np.ndarray,
 
 
 @numba.jit(nopython=True, parallel=True)
-def find_transition_times(t: np.ndarray,
-                          y: np.ndarray,
-                          threshold: float,
-                          falling_edge: bool = False) -> np.ndarray:
+def find_transition_times(
+    t: np.ndarray, y: np.ndarray, threshold: float, falling_edge: bool = False
+) -> np.ndarray:
     """
     Given the input signal `y` with samples at times `t`,
     find the times where `y` increases through the value `threshold`.

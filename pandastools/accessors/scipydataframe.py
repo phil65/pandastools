@@ -3,9 +3,6 @@
 @author: Philipp Temminghoff
 """
 
-import datetime
-
-import numpy as np
 import pandas as pd
 import scipy.fftpack
 import scipy.io
@@ -50,8 +47,9 @@ class DataFrameAccessor(object):
 
 
 if __name__ == "__main__":
-    import pandastools
+    import pandastools  # type: ignore  # noqa: F401
     import pydataset
+
     test = pydataset.data("Formaldehyde")
     result = test.pt_scipy.fft()
     print(result)

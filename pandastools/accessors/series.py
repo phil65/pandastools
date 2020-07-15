@@ -16,7 +16,6 @@ class SeriesAccessor(object):
 
     def downcast(self):
         s = self._obj
-        prev_dtype = s.dtype
         if s.dtype == "float64":
             all_int = np.all(np.mod(s.to_numpy(), 1) == 0)
             dc_type = "integer" if all_int else "float"
@@ -42,18 +41,28 @@ class SeriesAccessor(object):
         secs = (self._obj - year) * SECONDS_PER_YEAR
         return pd.to_datetime(year, format="%Y") + pd.to_timedelta(secs, unit="s")
 
-    def cut(self,
-            bins,
-            right: bool = True,
-            labels=None,
-            retbins: bool = False,
-            precision: int = 3,
-            include_lowest: bool = False,
-            duplicates: str = "raise",
-            ordered: bool = True):
-        return pd.cut(self._obj, bins=bins, right=right, labels=labels, retbins=retbins,
-                      precision=precision, include_lowest=include_lowest, duplicates=duplicates,
-                      ordered=ordered)
+    def cut(
+        self,
+        bins,
+        right: bool = True,
+        labels=None,
+        retbins: bool = False,
+        precision: int = 3,
+        include_lowest: bool = False,
+        duplicates: str = "raise",
+        ordered: bool = True,
+    ):
+        return pd.cut(
+            self._obj,
+            bins=bins,
+            right=right,
+            labels=labels,
+            retbins=retbins,
+            precision=precision,
+            include_lowest=include_lowest,
+            duplicates=duplicates,
+            ordered=ordered,
+        )
 
 
 if __name__ == "__main__":
