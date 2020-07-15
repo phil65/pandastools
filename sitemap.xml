@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
+     <loc>https://phil65.github.io/PandasTools/index.html</loc>
+     <lastmod>2020-07-15</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://phil65.github.io/PandasTools/api/dataframe.html</loc>
+     <lastmod>2020-07-15</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://phil65.github.io/PandasTools/api/series.html</loc>
+     <lastmod>2020-07-15</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://phil65.github.io/PandasTools/api/index.html</loc>
+     <lastmod>2020-07-15</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://phil65.github.io/PandasTools/contributing.html</loc>
+     <lastmod>2020-07-15</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://phil65.github.io/PandasTools/changelog.html</loc>
+     <lastmod>2020-07-15</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+</urlset>
