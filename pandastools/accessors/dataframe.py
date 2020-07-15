@@ -48,8 +48,7 @@ class DataFrameAccessor(object):
     def convert_dtypes(self, old_type, new_dtype):
         cols = self._obj.select_dtypes([old_type]).columns
         df = self._obj.copy()
-        df[cols] = (df.select_dtypes([old_type])
-                    .apply(lambda x: x.astype(new_dtype)))
+        df[cols] = df.select_dtypes([old_type]).apply(lambda x: x.astype(new_dtype))
         return df
 
     def split(self, thresh, colname, extra_rows: int = 0):
@@ -60,10 +59,9 @@ class DataFrameAccessor(object):
         df = self._obj.drop("secs", errors="ignore", axis=1)
         array = np.full((len(df.index),), np.nan)
         df["process_num"] = pd.Categorical(array)
-        df = dataimport.add_transition_info(ds=df,
-                                            colname=colname,
-                                            threshold=thresh,
-                                            extra_rows=extra_rows)
+        df = dataimport.add_transition_info(
+            ds=df, colname=colname, threshold=thresh, extra_rows=extra_rows
+        )
         return df
 
     def index_to_secs(self):
@@ -95,7 +93,6 @@ class DataFrameAccessor(object):
         return result
 
     def merge_columns(self, columns, divider=" "):
-
         def split(x):
             return divider.join(str(i) for i in x)
 
@@ -107,6 +104,28 @@ class DataFrameAccessor(object):
         new_cols = df[columns]
         new_cols.columns = new_names
         df = pd.concat([df, new_cols], axis=1)
+        return df
+
+    def eval(self, code: str, variable_name: str = "df"):
+        """
+        apply a script to the dataset.
+        """
+        context = {variable_name: self._obj, "__builtins__": __builtins__}
+        df = helpers.evaluate(code=code, context=context, return_val=variable_name)
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("Function needs to return a dataframe")
+        return df
+
+    @classmethod
+    def from_script(cls, code: str, variable_name="df"):
+        """
+        return a ds resulting from a code block. Result is wrapped as function
+        because we dont want "ds" hardcoded
+        """
+        context = {"__builtins__": __builtins__}
+        df = helpers.evaluate(code, context, return_val=variable_name)
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("Function needs to return a dataframe")
         return df
 
 
