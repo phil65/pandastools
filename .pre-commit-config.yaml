@@ -1,0 +1,26 @@
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.1.0 # Use the ref you want to point at
+  hooks:
+    # - id: trailing-whitespace
+    - id: check-ast
+    - id: check-case-conflict
+    - id: check-docstring-first
+    - id: flake8
+    - id: check-merge-conflict
+    - id: check-yaml
+      args: ["--unsafe"]
+    - id: detect-private-key
+    - id: forbid-new-submodules
+    - id: check-json
+    - id: check-added-large-files
+# https://pre-commit.com/hooks.html
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v1.17.0
+  hooks:
+    - id: commitizen
+      stages: [commit-msg]
+- repo: https://github.com/ambv/black
+  rev: stable
+  hooks:
+    - id: black
+      language_version: python3.7

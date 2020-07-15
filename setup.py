@@ -3,27 +3,19 @@
 
 """The setup script."""
 
+import pathlib
 from setuptools import find_packages, setup
 
-# from sphinx.setup_command import BuildDoc
+README = pathlib.Path("docs/index.md").read_text()
+HISTORY = pathlib.Path("CHANGELOG.md").read_text()
 
-with open("README.rst") as readme_file:
-    readme = readme_file.read()
-
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
-
-requirements = ["pandas", "numba"]
-
-setup_requirements = ["pytest-runner", "sphinx"]
-
-test_requirements = ["pytest", ]
+REQUIREMENTS = ["pandas", "numba"]
 
 setup(
     author="Philipp Temminghoff",
     author_email="phil65@kodi.tv",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
@@ -31,20 +23,18 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    description="Helper functions for pandas",
-    install_requires=requirements,
+    description="Helper functions for Pandas DataFrames / Series",
+    install_requires=REQUIREMENTS,
     license="MIT license",
-    # long_description=readme + "\n\n" + history,
-    # long_description_content_type="text/x-rst",
+    python_requires=">=3.6.0",
+    long_description=README + "\n\n" + HISTORY,
+    long_description_content_type="text/markdown",
     include_package_data=True,
-    keywords="pandastools",
+    keywords="pandas",
     name="pandastools",
     packages=find_packages(),
-    setup_requires=setup_requirements,
     test_suite="tests",
-    tests_require=test_requirements,
     url="https://github.com/phil65/pandastools",
     version="0.2.3",
     zip_safe=False,
-    # cmdclass={"build_sphinx": BuildDoc}
 )

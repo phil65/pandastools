@@ -1,17 +1,19 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: help clean lint test docs serve release bump
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
-
-try:
-	from urllib import pathname2url
-except:
-	from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
+from urllib.request import pathname2url
+webbrowser.open("file:" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
 export BROWSER_PYSCRIPT
+
+define BUMP_SCRIPT
+import os, pandastools
+version = pandastools.__version__
+os.system(f'cz changelog --unreleased-version "v{version}"')
+endef
+export BUMP_SCRIPT
 
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -29,72 +31,28 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
-
-clean-build: ## remove build artifacts
-	rm -fr build/
-	rm -fr dist/
-	rm -fr .eggs/
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
-
-clean-pyc: ## remove Python file artifacts
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
-
-clean-test: ## remove test and coverage artifacts
-	rm -fr .tox/
-	rm -f .coverage
-	rm -fr htmlcov/
-	rm -fr .pytest_cache
+clean: ## remove all build, test, coverage and Python artifacts
+	git clean -dfX
 
 lint: ## check style with flake8
-	flake8 pandastools tests
+	flake8 pandastools
 
 test: ## run tests quickly with the default Python
 	py.test
 
-test-all: ## run tests on every Python version with tox
-	tox
+docs: ## builds the documentation
+	mkdocs build
 
-coverage: ## check code coverage quickly with the default Python
-	coverage run --source pandastools -m pytest
-	coverage report -m
-	coverage html
-	$(BROWSER) htmlcov/index.html
+serve: ## run html server watching file changes in realtime
+	$(BROWSER) site/index.html
+	mkdocs serve
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/pandastools.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ pandastools
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
+# install: clean ## install the package to the active Python's site-packages
+# 	python setup.py install
 
-servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+changelog: ## create changelog
+	python -c "$$BUMP_SCRIPT"
+	mv CHANGELOG.md docs/changelog.md
 
-release: dist ## package and upload a release
-	twine upload dist/*
-
-dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
-	ls -l dist
-
-install: clean ## install the package to the active Python's site-packages
-	python setup.py install
-
-bump-minor: ## minor version bump
-	bump2version minor --allow-dirty --tag
-	pip install -e .
-
-bump-patch: ## patch version bump
-	bump2version patch --allow-dirty --tag
-	pip install -e .
-
-bump-major: ## major version bump
-	bump2version major --allow-dirty --tag
-	pip install -e .
+bump: ## version bump
+	poetry run python scripts/bump.py

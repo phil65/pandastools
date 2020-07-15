@@ -1,26 +1,50 @@
+# Config file for automatic testing at travis-ci.org
+
 os: linux
 dist: bionic
 language: python
 python:
+  - "3.6"
   - "3.7"
   - "3.8"
+
 install:
   - pip install --upgrade pip
-  - pip install -r requirements_dev.txt
-  - pip install -r requirements.txt
-  - pip install -r requirements_addons.txt
+  - pip install poetry --pre
+  - poetry install -E addons
+
+# Command to run tests, e.g. python setup.py test
 script:
-  - python -m pytest --doctest-modules --cov=pandastools
+  # - tox
+  - poetry run pytest --doctest-modules --cov=pandastools
+
 after_success:
-  - codecov
+  - poetry run codecov
+  - poetry config pypi-token.pypi $PYPI_TOKEN
+  - make docs
+
+# Assuming you have installed the travis-ci CLI tool, after you
+# create the Github repo and add it to Travis, run the
+# following command to finish PyPI deployment setup:
+# $ travis encrypt --add deploy.password
+
 deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  username: phil65
-  cleanup: false
-  password:
-    secure: PKq+jhcGTPrrc7zvRJdlp3PTNveZSme7zXrU/97Se72t0T0mqTgdrhZnkTZUQxNjT+S1Ztl1KafVOaqbNKfO3j/N7xfiHlhOmIS/0Q4F3KxdeTkqdlk5P6PoEnWittRLzUpDYGRgUt5CZvDUHWlI5k4hxzfLmQTU+c8+fu4bBMGg1Vab8Z2m0/a748QSwpiJR0pLKJZPBO3nr6jBEQPCV77DELSWTx2Ze7+lJZNh4Gj0KVEvB75h7wdQFtMu3wvL9VQKJdUAjtL53vOc6ChA6J/wOO2IcZoV1+r5fE6Gq+U/9+lUoXin38fS7VgcXGR7YOZX0h+eTJruzNvG3+6UKPuOQrEWbWYsu96KSjeFBe/WHR08rOXvqsq6E/oOV8N6Jjp7tk283cnQz8CW7B0Hb8HhtKsiZVTy37cuZj8DAGDV+o5s//RPh0I844EVhznwTrHj7RiPGTTCp/qr5sh60pgdpFOereEpx1fkP1CwHMzRtesDrLTx42ysniBdD7bFoK+5l+7y9D+Dgqf6kk4MLAbInLgLl74KHfOqOvxBaEX8zkbSGU/rYinO5SsftBoHTjyqw+AWogwgC8nnyVoALduhyeiEXFUPTIuma7wemBZVGeDFRMhQuJYlRc3RmyRLxsI4qD3bg/afLYKiKxTsAS89dr8vXsnN301QEtTRbik=
-  on:
-    tags: true
-    repo: phil65/pandastools
-    python: 3.7
+  - provider: pages
+    edge: true
+    cleanup: false
+    strategy: git
+    local_dir: site
+    token: $GITHUB_TOKEN
+    keep_history: true
+    on:
+      tags: true
+      repo: phil65/pandastools
+      python: 3.7
+  - provider: script
+    edge: true
+    script: poetry publish --build
+    cleanup: false
+    on:
+      tags: true
+      repo: phil65/pandastools
+      python: 3.7

@@ -1,0 +1,123 @@
+[tool.poetry]
+name = "PandasTools"
+version = "0.2.3"
+description = "Helper functions for Pandas DataFrames / Series"
+readme = 'docs/index.md'
+repository = "https://github.com/phil65/pandastools"
+homepage = "https://github.com/phil65/pandastools"
+authors = ["phil65 <philipptemminghoff@googlemail.com>"]
+packages = [
+    { include = "pandastools" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+pandas = "^1.0.5"
+numba = "^0"
+scipy = {version = "^1.5.0", optional=true}
+
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.3"
+pip = "^20.1.1"
+flake8 = "^3.8.3"
+pytest-cov = "^2.10.0"
+mypy = "^0"
+pylint = "^2.5.3"
+codecov = "^2.1.7"
+coverage = "^5.1"
+mkdocs = "^1.1.2"
+mkdocs-material = "^5.4.0"
+mkdocstrings = "^0"
+pymdown-extensions = "^7.1"
+twine = "^3.2.0"
+black = "^19.10b0"
+
+[tool.poetry.extras]
+addons = ["scipy"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "tests",
+]
+collect_ignore = ['setup.py']
+junit_family = "xunit2"
+
+[tool.isort]
+line_length = 90
+include_trailing_comma = true
+lines_after_imports = 2
+lines_between_types = 1
+# atomic = true
+multi_line_output = 3
+force_sort_within_sections = true
+combine_as_imports = true
+# use_parentheses = true
+force_grid_wrap = 0
+# not_skip = "__init__.py"
+skip_glob = ["*/setup.py", "*/__init__.py"]
+# filter_files = true
+
+# known_first_party = "poetry"
+# known_third_party = [
+#     "cachecontrol",
+#     "cachy",
+#     "cleo",
+#     "clikit",
+#     "html5lib",
+#     "httpretty",
+#     "jsonschema",
+#     "keyring",
+#     "pexpect",
+#     "pkginfo",
+#     "pyparsing",
+#     "pytest",
+#     "requests",
+#     "requests_toolbelt",
+#     "shellingham",
+#     "tomlkit",
+# ]
+
+[tool.flit.metadata]
+module = "pandastools"
+author = "Philipp Temminghoff"
+author-email = "philipptemminghoff@googlemail.com"
+home-page = "https://github.com/phil65/pandastools"
+
+[tool.black]
+line-length = 90
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | tests/.*/setup.py
+)/
+'''
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.2.3"
+tag_format = "v$version"
+version_files = [
+    "pandastools/__init__.py:__version__",
+    "setup.py:version",
+    "pyproject.toml:version",
+]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+# need to check this
+# requires = ["poetry_core>=1.0.0"]
+# build-backend = "poetry.core.masonry.api"
+# for pip install -e .
+# requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4", "pbr"]
