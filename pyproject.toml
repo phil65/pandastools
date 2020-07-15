@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "PandasTools"
-version = "0.2.3"
+version = "0.3.0"
 description = "Helper functions for Pandas DataFrames / Series"
 readme = 'docs/index.md'
 repository = "https://github.com/phil65/pandastools"
@@ -105,7 +105,7 @@ exclude = '''
 '''
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.2.3"
+version = "0.3.0"
 tag_format = "v$version"
 version_files = [
     "pandastools/__init__.py:__version__",
