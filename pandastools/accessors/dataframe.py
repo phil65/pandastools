@@ -20,7 +20,7 @@ class DataFrameAccessor:
     def iat(self, start=None, stop=None, step=1):
         return self._obj.iloc[start:stop:step]
 
-    def get_info(self, null_counts: bool = True) -> str:
+    def get_info(self, show_counts: bool = True) -> str:
         """Get a concise summary of a DataFrame.
 
         This method prints information about a DataFrame including
@@ -28,7 +28,7 @@ class DataFrameAccessor:
 
         Parameters
         ----------
-        null_counts : bool, optional
+        show_counts : bool, optional
             Whether to show the non-null counts.
 
         Returns
@@ -37,7 +37,7 @@ class DataFrameAccessor:
             The summary of a DataFrame.
         """
         buf = io.StringIO()
-        self._obj.info(buf=buf, null_counts=null_counts)
+        self._obj.info(buf=buf, show_counts=show_counts)
         return buf.getvalue()
 
     def uniquify_columns(self) -> pd.DataFrame:

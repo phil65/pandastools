@@ -17,7 +17,7 @@ class IndexAccessor:
             logger.debug("index_to_secs failed. Index empty")
             return self._obj
         elif isinstance(self._obj, pd.DatetimeIndex):
-            secs = self._obj.astype(int) / 1_000_000_000
+            secs = self._obj.view(int) / 1_000_000_000
             secs = secs - secs[0]
             return secs
         else:
