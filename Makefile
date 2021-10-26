@@ -38,14 +38,14 @@ lint: ## check style with flake8
 	flake8 pandastools
 
 test: ## run tests quickly with the default Python
-	py.test
+	poetry run pytest
 
 docs: ## builds the documentation
-	mkdocs build
+	poetry run mkdocs build
 
 serve: ## run html server watching file changes in realtime
 	$(BROWSER) site/index.html
-	mkdocs serve
+	poetry run mkdocs serve
 
 # install: clean ## install the package to the active Python's site-packages
 # 	python setup.py install
