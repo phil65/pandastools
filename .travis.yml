@@ -4,9 +4,8 @@ os: linux
 dist: bionic
 language: python
 python:
-  - "3.6"
-  - "3.7"
   - "3.8"
+  - "3.9"
 
 install:
   - pip install --upgrade pip
@@ -39,7 +38,7 @@ deploy:
     on:
       tags: true
       repo: phil65/pandastools
-      python: 3.7
+      python: 3.9
   - provider: script
     edge: true
     script: poetry publish --build
@@ -47,4 +46,4 @@ deploy:
     on:
       tags: true
       repo: phil65/pandastools
-      python: 3.7
+      python: 3.9
