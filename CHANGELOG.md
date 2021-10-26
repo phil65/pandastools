@@ -1,3 +1,13 @@
+## v0.5.0 (2021-10-26)
+
+### Fix
+
+- get rid of some deprecated stuff
+
+### Feat
+
+- add github workflow
+
 ## v0.4.0 (2021-10-26)
 
 ### Feat
