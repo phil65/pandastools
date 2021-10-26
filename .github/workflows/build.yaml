@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         platform: [ubuntu-latest, macos-10.15, windows-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9"]
     runs-on: ${{ matrix.platform }}
     steps:
     - uses: actions/checkout@v2
@@ -26,16 +26,16 @@ jobs:
       run: |
         poetry run pytest --doctest-modules --junitxml=junit/test-results.xml --cov=pandastools --cov-report=xml --cov-report=html
     - name: Create documentation
-      if: matrix.python-version == '3.10' && runner.os == 'Linux'
+      if: matrix.python-version == '3.9' && runner.os == 'Linux'
       run: |
         poetry run mkdocs build
     - name: Build and publish
-      if: startsWith(github.ref, 'refs/tags/v') && matrix.python-version == '3.10' && runner.os == 'Linux'
+      if: startsWith(github.ref, 'refs/tags/v') && matrix.python-version == '3.9' && runner.os == 'Linux'
       run: |
         poetry config pypi-token.pypi ${{ secrets.PYPI_SECRET }}
         poetry publish --build
     - name: Deploy docs
-      if: startsWith(github.ref, 'refs/tags/v') && matrix.python-version == '3.10' && runner.os == 'Linux'
+      if: startsWith(github.ref, 'refs/tags/v') && matrix.python-version == '3.9' && runner.os == 'Linux'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
