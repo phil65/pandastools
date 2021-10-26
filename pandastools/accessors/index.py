@@ -1,17 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Philipp Temminghoff
-"""
-
 import logging
+from typing import Optional, Union
 
 import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
 
 @pd.api.extensions.register_index_accessor("pt")
-class IndexAccessor(object):
+class IndexAccessor:
     def __init__(self, pandas_obj):
         self._obj = pandas_obj
 
@@ -27,14 +24,14 @@ class IndexAccessor(object):
             logger.debug("index_to_secs failed. No DateTimeIndex")
             return self._obj
 
-    def detect_gaps(self, max_diff, level=None):
+    def detect_gaps(self, max_diff: Union[float, str], level=None):
         if level is None:
             index = self._obj
         else:
             index = self._obj.get_level_values(level)
         return (index.to_series().diff() > max_diff).cumsum() + 1
 
-    def to_datetime(self, level=None, fmt=None, errors="ignore"):
+    def to_datetime(self, level=None, fmt: Optional[str] = None, errors: str = "ignore"):
         kwargs = dict(format=fmt, errors=errors, infer_datetime_format=not bool(fmt))
         if isinstance(self._obj, pd.MultiIndex):
             values = self._obj.get_level_values(level).to_series()

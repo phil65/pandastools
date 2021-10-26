@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Philipp Temminghoff
-"""
-
-from typing import Optional
 import ast
 import itertools
-import time
 import logging
+import time
+from typing import Any, Dict, Optional
+
 
 logger = logging.getLogger(__name__)
 
@@ -26,10 +22,10 @@ def uniquify_names(new_cols, old_cols):
     return cols
 
 
-def evaluate(code, context=None, return_val: Optional[str] = None):
-    """
-    Evaluate several lines of input, returning the result of the last line
-    """
+def evaluate(
+    code, context: Optional[Dict[str, Any]] = None, return_val: Optional[str] = None
+):
+    """Evaluate several lines of input, returning the result of the last line."""
     now = time.time()
     if context is None:
         context = locals()

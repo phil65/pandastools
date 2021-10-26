@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Philipp Temminghoff
-"""
-
+from collections.abc import Hashable
 import io
 import logging
+from typing import List, Union
 
 import numpy as np
 import pandas as pd
 
 from pandastools.utils import dataimport, helpers
 
+
 logger = logging.getLogger(__name__)
 
 
 @pd.api.extensions.register_dataframe_accessor("pt")
-class DataFrameAccessor(object):
+class DataFrameAccessor:
     def __init__(self, parent):
         self._obj = parent
 
@@ -23,11 +21,36 @@ class DataFrameAccessor(object):
         return self._obj.iloc[start:stop:step]
 
     def get_info(self, null_counts: bool = True) -> str:
+        """Get a concise summary of a DataFrame.
+
+        This method prints information about a DataFrame including
+        the index dtype and column dtypes, non-null values and memory usage.
+
+        Parameters
+        ----------
+        null_counts : bool, optional
+            Whether to show the non-null counts.
+
+        Returns
+        -------
+        str
+            The summary of a DataFrame.
+        """
         buf = io.StringIO()
         self._obj.info(buf=buf, null_counts=null_counts)
         return buf.getvalue()
 
-    def uniquify_columns(self):
+    def uniquify_columns(self) -> pd.DataFrame:
+        """Modify column names of a DataFrame to be unique.
+
+        In case a DataFrame contains several equal column names, rename all columns
+        except the first one by appending _{count}.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with unique column names
+        """
         diff = len(self._obj.columns) - len(set(self._obj.columns))  # type: ignore
         if diff == 0:
             return self._obj
@@ -38,7 +61,7 @@ class DataFrameAccessor(object):
             newitem = str(item)
             while newitem in seen:
                 fudge += 1
-                newitem = "{}_{}".format(item, fudge)
+                newitem = f"{item}_{fudge}"
             seen.add(newitem)
             new.append(newitem)
         df = self._obj.copy()
@@ -51,11 +74,23 @@ class DataFrameAccessor(object):
         df[cols] = df.select_dtypes([old_type]).apply(lambda x: x.astype(new_dtype))
         return df
 
-    def split(self, thresh, colname, extra_rows: int = 0):
+    def split(self, thresh: float, colname: str, extra_rows: int = 0) -> pd.DataFrame:
+        """Append columns with split information based on supplied criteria.
+
+        Parameters
+        ----------
+        thresh : float
+            Threshold to use for splitting.
+        colname : str
+            Column used to detect splits.
+        extra_rows : int, optional
+            Amount of rows to append in both directions for each split section.
+
+        Returns
+        -------
+        pd.DataFrame
+            The dataframe including new columns containing the split information.
         """
-        split dataframe into separate chunks based on supplied criteria
-        """
-        # split processes based on bool value (just process when no bool split)
         df = self._obj.drop("secs", errors="ignore", axis=1)
         array = np.full((len(df.index),), np.nan)
         df["process_num"] = pd.Categorical(array)
@@ -64,7 +99,14 @@ class DataFrameAccessor(object):
         )
         return df
 
-    def index_to_secs(self):
+    def index_to_secs(self) -> pd.DataFrame:
+        """Convert the DateTimeIndex to seconds, starting with 0.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing an IntegerIndex
+        """
         if self._obj.empty:
             logger.debug("index_to_secs failed. Dataframe empty")
             return self._obj
@@ -82,7 +124,7 @@ class DataFrameAccessor(object):
         df[cols] = df.select_dtypes(["object"]).apply(lambda x: x.astype("category"))
         return df
 
-    def tolerance_bands(self, window, pct):
+    def tolerance_bands(self, window: Union[int, str], pct: float):
         df = self._obj
         rolling = df.rolling(window=window, center=True, min_periods=1)
         u_band = np.maximum(rolling.max(), df * (pct + 1))
@@ -92,13 +134,13 @@ class DataFrameAccessor(object):
         result.columns = cols
         return result
 
-    def merge_columns(self, columns, divider=" "):
+    def merge_columns(self, columns: List[Hashable], divider: str = " "):
         def split(x):
             return divider.join(str(i) for i in x)
 
         return self._obj[columns].apply(split, axis=1)
 
-    def duplicate_features(self, columns):
+    def duplicate_features(self, columns: List[Hashable]):
         df = self._obj
         new_names = helpers.uniquify_names(columns, df.columns)
         new_cols = df[columns]
@@ -107,9 +149,7 @@ class DataFrameAccessor(object):
         return df
 
     def eval(self, code: str, variable_name: str = "df"):
-        """
-        apply a script to the dataset.
-        """
+        """Apply a script to the dataset."""
         context = {variable_name: self._obj, "__builtins__": __builtins__}
         df = helpers.evaluate(code=code, context=context, return_val=variable_name)
         if not isinstance(df, pd.DataFrame):
@@ -117,9 +157,10 @@ class DataFrameAccessor(object):
         return df
 
     @classmethod
-    def from_script(cls, code: str, variable_name="df"):
-        """
-        return a ds resulting from a code block. Result is wrapped as function
+    def from_script(cls, code: str, variable_name: str = "df"):
+        """Return a ds resulting from a code block.
+
+        Result is wrapped as function
         because we dont want "ds" hardcoded
         """
         context = {"__builtins__": __builtins__}
