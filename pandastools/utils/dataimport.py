@@ -1,22 +1,25 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Philipp Temminghoff
-"""
-
+from collections.abc import Hashable
 import logging
 import time
+from typing import Optional
 
 import numba
 import numpy as np
 import pandas as pd
 
+
 logger = logging.getLogger(__name__)
 
 
-def add_transition_info(ds, colname, threshold: float = None, extra_rows: int = 0):
-    """
-    calculate splits and add "secs" and "process_num" column to dataframe
-    """
+def add_transition_info(
+    ds: pd.DataFrame,
+    colname: Hashable,
+    threshold: Optional[float] = None,
+    extra_rows: int = 0,
+    transition_col: str = "process_num",
+    time_col: str = "secs",
+):
+    """Calculate splits and add "secs" and "process_num" column to dataframe."""
     logger.info("Start splitting process")
     now = time.time()
     # setze ersten Wert auf 0. (evtl auch noch den letzten?)
@@ -37,18 +40,18 @@ def add_transition_info(ds, colname, threshold: float = None, extra_rows: int = 
         end_indexes = [len(ds.index)]  # perhaps -1 ?
 
     logger.info("Found indices. Applying new columns to dataset....")
-    ds = ds.drop("secs", errors="ignore", axis=1)
+    ds = ds.drop(time_col, errors="ignore", axis=1)
     proc = np.full((len(ds.index),), np.nan)
     for i, (start, end) in enumerate(zip(start_indexes, end_indexes), start=1):
         proc[start:end] = i
     categories = [i + 1 for i in range(len(start_indexes))]
-    ds["process_num"] = pd.Categorical(proc, categories=categories)
-    ds["secs"] = ds.groupby("process_num").apply(calc_secs)["secs"]
+    ds[transition_col] = pd.Categorical(proc, categories=categories)
+    ds[time_col] = ds.groupby(transition_col).apply(calc_secs)[time_col]
     logger.info(f"Splitting took {(time.time() - now):.2f} seconds")
     return ds
 
 
-def calc_secs(ds):
+def calc_secs(ds: pd.DataFrame):
     idx = ds.index.astype(int).to_numpy() / 1_000_000_000
     ds["secs"] = idx - idx[0] if len(ds.index) > 0 else np.nan
     return ds
@@ -58,9 +61,7 @@ def calc_secs(ds):
 def get_transition_indices(
     y: np.ndarray, threshold: float, falling_edge: bool = False
 ) -> np.ndarray:
-    """
-    return indices where a transition occurs (default: detect rising edges)
-    """
+    """Return indices where a transition occurs (default: detect rising edges)."""
     # Find where y crosses a threshold in a specific direction.
     lower = y < threshold
     higher = y >= threshold
@@ -74,7 +75,8 @@ def get_transition_indices(
 def find_transition_times(
     t: np.ndarray, y: np.ndarray, threshold: float, falling_edge: bool = False
 ) -> np.ndarray:
-    """
+    """Find transition times.
+
     Given the input signal `y` with samples at times `t`,
     find the times where `y` increases through the value `threshold`.
 
@@ -83,7 +85,6 @@ def find_transition_times(
     Linear interpolation is used to estimate the time `t` between
     samples at which the transitions occur.
     """
-
     transition_indices = get_transition_indices(y, threshold, falling_edge)
 
     t0 = t[transition_indices]
@@ -97,8 +98,9 @@ def find_transition_times(
 
 
 @numba.jit(nopython=True)
-def periods(t: np.ndarray, y: np.ndarray, threshold):
-    """
+def periods(t: np.ndarray, y: np.ndarray, threshold: float):
+    """Return periods where y crosses the threshold over given time.
+
     Given the input signal `y` with samples at times `t`,
     find the time periods between the times at which the
     signal `y` increases through the value `threshold`.
@@ -111,6 +113,6 @@ def periods(t: np.ndarray, y: np.ndarray, threshold):
     return deltas
 
 
-def sliced(df, column_name, threshold):
+def sliced(df: pd.DataFrame, column_name: str, threshold: float):
     t_indices = get_transition_indices(df[column_name], threshold)
     return np.split(df, t_indices)
