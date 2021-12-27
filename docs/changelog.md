@@ -1,3 +1,9 @@
+## v0.5.2 (2021-12-27)
+
+### Fix
+
+- allow pre-releases for numba
+
 ## v0.5.1 (2021-10-26)
 
 ### Fix
