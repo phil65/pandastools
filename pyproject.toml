@@ -11,10 +11,10 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 pandas = "^1.0.5"
-numba = {version = "^0", python="<3.11", allow-prereleases=true}
-scipy = {version = "^1.7.0", python=">=3.8,<3.11", optional=true}
+numba = {version = "^0", python=">=3.9,<3.11", allow-prereleases=true}
+scipy = {version = "^1.7.0", python=">=3.9,<3.11", optional=true}
 
 
 [tool.poetry.dev-dependencies]
