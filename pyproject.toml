@@ -102,10 +102,13 @@ exclude = '''
   | tests/.*/setup.py
 )/
 '''
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "0.5.2"
 tag_format = "v$version"
+update_changelog_on_bump = true
+changelog_file = "docs/changelog.md"
 version_files = [
     "pandastools/__init__.py:__version__",
     "setup.py:version",
