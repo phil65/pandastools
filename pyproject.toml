@@ -15,7 +15,7 @@ python = "^3.9"
 pandas = "^1.0.5"
 numba = {version = "^0", python=">=3.9,<3.11", allow-prereleases=true}
 scipy = {version = "^1.7.0", python=">=3.9,<3.11", optional=true}
-
+llvmlite = {version = "*", allow-prereleases=true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^7"
