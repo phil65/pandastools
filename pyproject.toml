@@ -28,7 +28,7 @@ codecov = "^2.1.7"
 coverage = "^6"
 mkdocs = "^1.1.2"
 mkdocs-material = "^8"
-mkdocstrings = "^0"
+mkdocstrings = {version = "^0", extras = ["python"]}
 pymdown-extensions = "^9"
 twine = "^4.0"
 black = "^22.0"

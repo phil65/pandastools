@@ -18,9 +18,8 @@ plugins:
         default_handler: python
         handlers:
           python:
-            rendering:
+            options:
               show_source: true
-            selection:
               inherited_members: false
 markdown_extensions:
     # - smarty
