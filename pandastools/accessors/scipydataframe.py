@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Philipp Temminghoff
-"""
-
 import pandas as pd
 import scipy.fftpack
 import scipy.io
@@ -10,7 +5,7 @@ import scipy.io.arff
 
 
 @pd.api.extensions.register_dataframe_accessor("pt_scipy")
-class DataFrameAccessor(object):
+class DataFrameAccessor:
     def __init__(self, parent):
         self._obj = parent
 
@@ -47,8 +42,9 @@ class DataFrameAccessor(object):
 
 
 if __name__ == "__main__":
-    import pandastools  # type: ignore  # noqa: F401
     import pydataset
+
+    import pandastools  # type: ignore  # noqa: F401
 
     test = pydataset.data("Formaldehyde")
     result = test.pt_scipy.fft()

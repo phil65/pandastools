@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-
-"""accessors module
-
-contains accessors for pandas
-"""
+"""contains accessors for pandas."""
 
 from .dataframe import DataFrameAccessor
 from .index import IndexAccessor

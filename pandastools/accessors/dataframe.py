@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Hashable
 import io
 import logging
-from typing import List, Union
 
 import numpy as np
 import pandas as pd
@@ -124,23 +125,23 @@ class DataFrameAccessor:
         df[cols] = df.select_dtypes(["object"]).apply(lambda x: x.astype("category"))
         return df
 
-    def tolerance_bands(self, window: Union[int, str], pct: float):
+    def tolerance_bands(self, window: int | str, pct: float):
         df = self._obj
         rolling = df.rolling(window=window, center=True, min_periods=1)
         u_band = np.maximum(rolling.max(), df * (pct + 1))
         l_band = np.minimum(rolling.min(), df * (1 - pct))
         result = pd.concat([df, l_band, u_band], axis=1)
         cols = [f"{x}_{y}" for x in ["real", "lower", "upper"] for y in df.columns]
-        result.columns = cols
+        result.set_axis(cols, axis="columns")
         return result
 
-    def merge_columns(self, columns: List[Hashable], divider: str = " "):
+    def merge_columns(self, columns: list[Hashable], divider: str = " "):
         def split(x):
             return divider.join(str(i) for i in x)
 
         return self._obj[columns].apply(split, axis=1)
 
-    def duplicate_features(self, columns: List[Hashable]):
+    def duplicate_features(self, columns: list[Hashable]):
         df = self._obj
         new_names = helpers.uniquify_names(columns, df.columns)
         new_cols = df[columns]

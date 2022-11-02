@@ -1,17 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Philipp Temminghoff
-"""
+from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+
 
 SECONDS_PER_YEAR = 31_557_600
 
 
 @pd.api.extensions.register_series_accessor("pt")
-class SeriesAccessor(object):
-    def __init__(self, pandas_obj):
+class SeriesAccessor:
+    def __init__(self, pandas_obj: pd.Series):
         self._obj = pandas_obj
 
     def downcast(self):
@@ -44,13 +42,13 @@ class SeriesAccessor(object):
     def cut(
         self,
         bins,
-        right: bool = True,
+        right=True,
         labels=None,
-        retbins: bool = False,
-        precision: int = 3,
-        include_lowest: bool = False,
-        duplicates: str = "raise",
-        ordered: bool = True,
+        retbins=False,
+        precision=3,
+        include_lowest=False,
+        duplicates="raise",
+        ordered=True,
     ):
         return pd.cut(
             self._obj,
