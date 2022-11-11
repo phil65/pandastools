@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """Tests for `pandastools` package."""
 
 import pandas as pd
-import pytest
 
-from pandastools import accessors
+from pandastools import accessors  # noqa
 
 
 def test_uniquify_cols():
@@ -22,7 +18,7 @@ def test_uniquify_cols():
 
 def test_get_info():
     df = pd.DataFrame(dict(a=[1, 2, 5]))
-    result = df.pt.get_info()
+    df.pt.get_info()
 
 
 def test_split():
@@ -32,7 +28,7 @@ def test_split():
 
 
 def test_index_to_secs():
-    date_rng = pd.date_range(start='1/1/2018', end='1/08/2018', freq='H')
+    date_rng = pd.date_range(start="1/1/2018", end="1/08/2018", freq="H")
     result = pd.DataFrame(index=date_rng)
     result.index.pt.index_to_secs()
 
