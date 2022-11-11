@@ -35,6 +35,6 @@ setup(
     packages=find_packages(),
     test_suite="tests",
     url="https://github.com/phil65/pandastools",
-    version="0.5.6",
+    version="0.6.0",
     zip_safe=False,
 )
