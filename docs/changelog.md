@@ -1,3 +1,9 @@
+## v0.6.2 (2023-02-03)
+
+### Fix
+
+- include python 3.11 in dependencies
+
 ## v0.6.1 (2023-02-03)
 
 ### Fix
