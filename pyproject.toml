@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "PandasTools"
-version = "0.6.0"
+version = "0.6.1"
 description = "Helper functions for Pandas DataFrames / Series"
 readme = 'docs/index.md'
 repository = "https://github.com/phil65/pandastools"
@@ -106,7 +106,7 @@ exclude = '''
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.6.0"
+version = "0.6.1"
 tag_format = "v$version"
 update_changelog_on_bump = true
 changelog_file = "docs/changelog.md"

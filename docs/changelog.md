@@ -1,3 +1,9 @@
+## v0.6.1 (2023-02-03)
+
+### Fix
+
+- make threshold param for add_transition_info mandatory
+
 ## v0.6.0 (2022-11-11)
 
 ### Feat
