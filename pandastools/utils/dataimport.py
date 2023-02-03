@@ -1,7 +1,6 @@
 from collections.abc import Hashable
 import logging
 import time
-from typing import Optional
 
 import numba
 import numpy as np
@@ -14,7 +13,7 @@ logger = logging.getLogger(__name__)
 def add_transition_info(
     ds: pd.DataFrame,
     colname: Hashable,
-    threshold: Optional[float] = None,
+    threshold: float,
     extra_rows: int = 0,
     transition_col: str = "process_num",
     time_col: str = "secs",
@@ -25,8 +24,6 @@ def add_transition_info(
     # setze ersten Wert auf 0. (evtl auch noch den letzten?)
     # Bisschen unschön, aber nötig, damit start und end indexes in sync sind.
     col = ds[colname]
-    threshold if threshold else col.max() / 2
-
     start_indexes = get_transition_indices(col.to_numpy(), threshold)
     start_indexes = np.maximum(start_indexes - extra_rows, 0)
     end_indexes = get_transition_indices(col.to_numpy(), threshold, True)
