@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 README = pathlib.Path("docs/index.md").read_text()
 HISTORY = pathlib.Path("CHANGELOG.md").read_text()
 
-REQUIREMENTS = ["pandas", "numba"]
+REQUIREMENTS = ["pandas"]
 
 setup(
     author="Philipp Temminghoff",

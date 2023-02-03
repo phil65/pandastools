@@ -32,7 +32,6 @@ pip install pandastools
 
 ## Dependencies
 - [pandas](https://pypi.org/project/pandas)
-- [numba](https://pypi.org/project/numba)
 
 
 ## Installation from sources

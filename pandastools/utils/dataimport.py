@@ -2,7 +2,7 @@ from collections.abc import Hashable
 import logging
 import time
 
-import numba
+# import numba
 import numpy as np
 import pandas as pd
 
@@ -54,7 +54,7 @@ def calc_secs(ds: pd.DataFrame) -> pd.DataFrame:
     return ds
 
 
-@numba.jit(nopython=True, parallel=True)
+# @numba.jit(nopython=True, parallel=True)
 def get_transition_indices(
     y: np.ndarray, threshold: float, falling_edge: bool = False
 ) -> np.ndarray:
@@ -68,7 +68,7 @@ def get_transition_indices(
         return np.where(lower[:-1] & higher[1:])[0]
 
 
-@numba.jit(nopython=True, parallel=True)
+# @numba.jit(nopython=True, parallel=True)
 def find_transition_times(
     t: np.ndarray, y: np.ndarray, threshold: float, falling_edge: bool = False
 ) -> np.ndarray:
@@ -94,7 +94,7 @@ def find_transition_times(
     return transition_times
 
 
-@numba.jit(nopython=True)
+# @numba.jit(nopython=True)
 def periods(t: np.ndarray, y: np.ndarray, threshold: float):
     """Return periods where y crosses the threshold over given time.
 
