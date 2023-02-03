@@ -18,7 +18,7 @@ def add_transition_info(
     extra_rows: int = 0,
     transition_col: str = "process_num",
     time_col: str = "secs",
-):
+) -> pd.DataFrame:
     """Calculate splits and add "secs" and "process_num" column to dataframe."""
     logger.info("Start splitting process")
     now = time.time()
@@ -51,7 +51,7 @@ def add_transition_info(
     return ds
 
 
-def calc_secs(ds: pd.DataFrame):
+def calc_secs(ds: pd.DataFrame) -> pd.DataFrame:
     idx = ds.index.astype(int).to_numpy() / 1_000_000_000
     ds["secs"] = idx - idx[0] if len(ds.index) > 0 else np.nan
     return ds
