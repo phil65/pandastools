@@ -2,7 +2,7 @@ import ast
 import itertools
 import logging
 import time
-from typing import Any, Optional
+from typing import Any
 
 
 logger = logging.getLogger(__name__)
@@ -22,9 +22,7 @@ def uniquify_names(new_cols, old_cols):
     return cols
 
 
-def evaluate(
-    code, context: Optional[dict[str, Any]] = None, return_val: Optional[str] = None
-):
+def evaluate(code, context: dict[str, Any] | None = None, return_val: str | None = None):
     """Evaluate several lines of input, returning the result of the last line."""
     now = time.time()
     if context is None:
