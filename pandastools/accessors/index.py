@@ -44,7 +44,7 @@ class IndexAccessor:
             values = pd.to_datetime(
                 values, format=fmt, errors=errors, infer_datetime_format=not bool(fmt)
             )
-            return self._obj.set_levels(values, level)
+            return self._obj.set_levels(values, level=level)
         else:
             return pd.to_datetime(
                 self._obj, format=fmt, errors=errors, infer_datetime_format=not bool(fmt)

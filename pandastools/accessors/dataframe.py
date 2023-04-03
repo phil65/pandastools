@@ -112,8 +112,9 @@ class DataFrameAccessor:
             logger.debug("index_to_secs failed. Dataframe empty")
             return self._obj
         elif isinstance(self._obj.index, pd.DatetimeIndex):
-            secs = self._obj.index.astype(int) / 1_000_000_000
-            df = self._obj.assign(secs=secs - secs[0]).set_index("secs", drop=True)
+            secs: pd.Index = self._obj.index.astype(int) / 1_000_000_000
+            df = self._obj.assign(secs=secs - secs[0])
+            df = df.set_index("secs", drop=True)
             return df
         else:
             logger.debug("index_to_secs failed. No DateTimeIndex")

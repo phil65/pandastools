@@ -12,7 +12,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-pandas = "^1.4"
+pandas = "*"
 # numba = {version = "^0", python=">=3.9,<3.11", allow-prereleases=true}
 scipy = {version = "^1.7", python=">=3.9,<3.12", optional=true}
 bidict = "^0"
@@ -23,7 +23,7 @@ pytest = "^7"
 pip = "^23.0"
 flake8 = "^6"
 pytest-cov = "^4"
-mypy = "^0"
+mypy = "^1"
 pylint = "^2.5.3"
 codecov = "^2.1.7"
 coverage = "^7"

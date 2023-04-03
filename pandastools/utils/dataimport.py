@@ -43,7 +43,7 @@ def add_transition_info(
         proc[start:end] = i
     categories = [i + 1 for i in range(len(start_indexes))]
     ds[transition_col] = pd.Categorical(proc, categories=categories)
-    ds[time_col] = ds.groupby(transition_col).apply(calc_secs)[time_col]
+    ds[time_col] = ds.groupby(transition_col, group_keys=False).apply(calc_secs)[time_col]
     logger.info(f"Splitting took {(time.time() - now):.2f} seconds")
     return ds
 
